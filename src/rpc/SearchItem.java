@@ -1,6 +1,7 @@
 package rpc;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import entity.Item;
+import external.TicketMasterClient;
 
 /**
  * Servlet implementation class rpc
@@ -30,24 +34,17 @@ public class SearchItem extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		if(request.getParameter("username") != null) {
-			String username = request.getParameter("username");
-			
-			JSONObject obj = new JSONObject();
-			JSONArray array = new JSONArray();
-			
-			try {
-				obj.put("username", username);
-				array.put(new JSONObject().put("username", "abcd"));
-				array.put(new JSONObject().put("username", "1234"));
-			}catch(JSONException e) {
-				//nothing
-			}
-			RpcHelper.writeJsonArray(response, array);
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException {
+		TicketMasterClient tm = new TicketMasterClient();
+		double lat = Double.parseDouble(request.getParameter("lat"));
+		double lon = Double.parseDouble(request.getParameter("lon"));
+		List<Item> items = tm.search(lat, lon, null);
+		JSONArray array = new JSONArray();
+		for(Item item : items) {
+			array.put(item.toJSONObject());
 		}
-		
+		RpcHelper.writeJsonArray(response, array);
 	}
 
 	/**
