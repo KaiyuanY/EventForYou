@@ -47,6 +47,9 @@ public class Item {
 	public double getDistance() {
 		return distance;
 	}
+	public String getUrl() {
+		return url;
+	}
 	
 	public JSONObject toJSONObject() {
 		JSONObject obj = new JSONObject();

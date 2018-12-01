@@ -10,11 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
+import db.DBConnection;
+import db.DBConnectionFactory;
 import entity.Item;
-import external.TicketMasterClient;
 
 /**
  * Servlet implementation class rpc
@@ -36,15 +35,32 @@ public class SearchItem extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
-		TicketMasterClient tm = new TicketMasterClient();
+		//TicketMasterClient tm = new TicketMasterClient();
 		double lat = Double.parseDouble(request.getParameter("lat"));
 		double lon = Double.parseDouble(request.getParameter("lon"));
-		List<Item> items = tm.search(lat, lon, null);
-		JSONArray array = new JSONArray();
-		for(Item item : items) {
-			array.put(item.toJSONObject());
-		}
-		RpcHelper.writeJsonArray(response, array);
+//		List<Item> items = tm.search(lat, lon, null);
+//		JSONArray array = new JSONArray();
+//		for(Item item : items) {
+//			array.put(item.toJSONObject());
+//		}
+//		RpcHelper.writeJsonArray(response, array);
+		String term = request.getParameter("term");
+		DBConnection connection = DBConnectionFactory.getConnection();
+        try {
+        	List<Item> items = connection.searchItems(lat, lon, term);
+ 
+        	JSONArray array = new JSONArray();
+        	for (Item item : items) {
+        		array.put(item.toJSONObject());
+        	}
+        	RpcHelper.writeJsonArray(response, array);
+ 
+        } catch (Exception e) {
+        	e.printStackTrace();
+        } finally {
+        	connection.close();
+        }
+
 	}
 
 	/**
