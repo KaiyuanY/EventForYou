@@ -125,10 +125,16 @@ ul {
 	width: 100%;
 }
 
-#login-form button {
+#login-form fb:login-button{
 	cursor: pointer;
 	float: right;
 	padding: 8px 20px;
+}
+
+#login-form button {
+	cursor: pointer;
+	float: right;
+	padding: 8px 8px;
 	text-align: right;
 }
 

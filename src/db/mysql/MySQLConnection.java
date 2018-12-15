@@ -259,5 +259,25 @@ public class MySQLConnection implements DBConnection{
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean signup(String userId, String password, String firstName, String lastName) {
+		try {
+			String sql = "INSERT INTO users (user_id, password, first_name, last_name) VALUES(?, ?, ?, ?)";
+			PreparedStatement statement = connection.prepareStatement(sql);
+			
+			statement.setString(1, userId);
+			statement.setString(2, password);
+			statement.setString(3, firstName);
+			statement.setString(4, lastName);
+			statement.executeUpdate();
+
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			return false;
+		}
+		
+	}
 
 }

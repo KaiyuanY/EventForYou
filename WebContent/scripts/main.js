@@ -3,10 +3,11 @@
   /**
    * Variables
    */
-  var user_id = '1111';
-  var user_fullname = 'John';
-  var lng = -122.08;
-  var lat = 37.38;
+//  var user_id = '1111';
+//  var user_fullname = 'John';
+//  var lng = -122.08;
+//  var lat = 37.38;
+	var default_password = 'GOOGLE_PASSWORD';
 
   /**
    * Initialize major event handlers
@@ -14,16 +15,25 @@
   function init() {
     // register event listeners
     document.querySelector('#login-btn').addEventListener('click', login);
+    document.querySelector('#signup-btn').addEventListener('click', signUp);
+    document.querySelector('#submit-btn').addEventListener('click', onSubmit);
     document.querySelector('#nearby-btn').addEventListener('click', loadNearbyItems);
     document.querySelector('#fav-btn').addEventListener('click', loadFavoriteItems);
     document.querySelector('#recommend-btn').addEventListener('click', loadRecommendedItems);
     validateSession();
     // onSessionValid({"user_id":"1111","name":"John Smith","status":"OK"});
   }
+  
+  /**
+   * google login
+   */
+
+  
 
   /**
    * Session
    */
+  
   function validateSession() {
     onSessionInvalid();
     // The request parameters
@@ -174,11 +184,61 @@
   function showLoginError() {
     document.querySelector('#login-error').innerHTML = 'Invalid username or password';
   }
+  function showSignupSuccess() {
+	document.querySelector('#login-error').innerHTML = 'Successful signed up';
+  }
 
   function clearLoginError() {
     document.querySelector('#login-error').innerHTML = '';
   }
+  
+  //-----------------------------------
+  // Sign Up
+  // -----------------------------------
+  function signUp(){
+	  var nameField = document.querySelector('#signup-only');
+	  var signUpBtn = document.querySelector('#signup-btn');
+	  var loginBtn = document.querySelector('#login-btn');
+	  var submitBtn = document.querySelector('#submit-btn');
+	  showElement(nameField);
+	  showElement(submitBtn);
+	  hideElement(loginBtn);
+	  hideElement(signUpBtn);
+  }
+  function onSubmit(){
+	  var username = document.querySelector('#username').value;
+	  var password = document.querySelector('#password').value;
+	  var firstName = document.querySelector('#first-name').value;
+	  var lastName = document.querySelector('#last-name').value;
+	  
+	  var username = document.querySelector('#username').value;
+	  var password = document.querySelector('#password').value;
+	  password = md5(username + md5(password));
+	  var url = './signup';
+	  var req = JSON.stringify({
+	    user_id : username,
+	    password : password,
+	    fname : firstName,
+	    lname : lastName,
+	  });
+	  
+	  ajax('POST', url, req,
+		    // successful callback
+		    function(res) {
+		      var result = JSON.parse(res);
 
+		      // successfully logged in
+		      if (result.status === 'OK') {
+		        onSessionValid(result);
+		      }
+		    },
+
+		    // error
+		    function() {
+		      showLoginError();
+		    },
+		    true);
+  }
 
   // -----------------------------------
   // Helper Functions
