@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="Jupiter">
+    <wb-module deploy-name="EventForYou">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="context-root" value="Jupiter"/>
-        <property name="java-output-path" value="/Jupiter/build/classes"/>
+        <property name="java-output-path" value="/EventForYou/build/classes"/>
+        <property name="context-root" value="EventForYou"/>
     </wb-module>
 </project-modules>
